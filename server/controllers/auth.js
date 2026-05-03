@@ -11,6 +11,10 @@ const User = require('../models/User');
 exports.getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
+    if (user) {
+      user.lastActive = new Date();
+      await user.save();
+    }
     return res.status(200).json(user);
   } catch (err) {
     console.error(err.message);
@@ -42,6 +46,15 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ errors: [{ msg: 'Invalid credentials' }] });
     }
+
+    const loginEntry = { ip: req.ip, at: new Date() };
+    user.ipLog = Array.isArray(user.ipLog) ? user.ipLog : [];
+    user.ipLog.push(loginEntry);
+    if (user.ipLog.length > 50) {
+      user.ipLog.shift();
+    }
+    user.lastActive = new Date();
+    await user.save();
 
     const payload = {
       user: {
