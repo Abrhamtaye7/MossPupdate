@@ -16,7 +16,7 @@ exports.register = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, phone } = req.body;
 
   try {
     let user =
@@ -32,7 +32,7 @@ exports.register = async (req, res) => {
       });
     }
 
-    user = new User({ name, email, password });
+    user = new User({ name, email, password, phone });
 
     const salt = await bcrypt.genSalt(10);
 

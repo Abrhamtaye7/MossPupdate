@@ -2,6 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
 const { register } = require('../../controllers/users');
+const validateToken = require('../../middleware/auth');
+const upload = require('../../middleware/avatarUpload');
+const {
+  uploadAvatar,
+  getAvatars,
+  upgradePremium,
+} = require('../../controllers/userController');
 
 router.post(
   '/',
@@ -15,5 +22,9 @@ router.post(
   ],
   register,
 );
+
+router.post('/avatar', validateToken, upload.single('avatar'), uploadAvatar);
+router.get('/avatars', validateToken, getAvatars);
+router.post('/premium', validateToken, upgradePremium);
 
 module.exports = router;

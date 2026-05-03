@@ -18,4 +18,6 @@ module.exports = {
   SMTP_PW: process.env.SMTP_PW,
   FROM_NAME: 'MossPok Info',
   FROM_EMAIL: 'no-reply@mosspok.net',
+  REDIS_URL: process.env.REDIS_URL,
+  FEATURE_FLAGS: process.env.FEATURE_FLAGS,
 };

@@ -12,6 +12,11 @@ const useAuth = () => {
     setUserName,
     setEmail,
     setChipsAmount,
+    setIsPremium,
+    setIsAdmin,
+    setAvatarUrl,
+    setPhone,
+    setLastActive,
   } = useContext(globalContext);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -77,13 +82,28 @@ const useAuth = () => {
         },
       });
 
-      const { _id, name, email, chipsAmount } = res.data;
+      const {
+        _id,
+        name,
+        email,
+        chipsAmount,
+        isPremium,
+        isAdmin,
+        avatarUrl,
+        phone,
+        lastActive,
+      } = res.data;
 
       setIsLoggedIn(true);
       setId(_id);
       setUserName(name);
       setEmail(email);
       setChipsAmount(chipsAmount);
+      setIsPremium(Boolean(isPremium));
+      setIsAdmin(Boolean(isAdmin));
+      setAvatarUrl(avatarUrl || null);
+      setPhone(phone || null);
+      setLastActive(lastActive || null);
     } catch (error) {
       localStorage.removeItem(token);
       alert(error);
@@ -92,11 +112,16 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    setId(null);
-    setUserName(null);
-    setEmail(null);
-    setChipsAmount(null);
+      setIsLoggedIn(false);
+      setId(null);
+      setUserName(null);
+      setEmail(null);
+      setChipsAmount(null);
+      setIsPremium(false);
+      setIsAdmin(false);
+      setAvatarUrl(null);
+      setPhone(null);
+      setLastActive(null);
   };
 
   return [isLoggedIn, login, logout, register, loadUser];
